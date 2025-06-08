@@ -33,24 +33,30 @@ jobs:
           name: java-app
           path: '${{ github.workspace }}/target/*.jar'
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: java-app
-      
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'dev11'
-          slot-name: 'Production'
-          package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C785263A56A4478CA101D2614E7636D9 }}
+ deploy:
+  runs-on: ubuntu-latest
+  needs: build
+  environment:
+    name: 'Production'
+    url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+  steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: java-app
+
+    # 👇 Add this step before deployment
+    - name: Azure Login using Publish Profile
+      uses: azure/login@v1
+      with:
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C785263A56A4478CA101D2614E7636D9 }}
+
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: 'dev11'
+        slot-name: 'Production'
+        package: '*.jar'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C785263A56A4478CA101D2614E7636D9 }}
