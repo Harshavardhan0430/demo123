@@ -58,6 +58,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'sjbit-demo3'
+          app-name: 'dev11'
           slot-name: 'Production'
           package: 'sjbit-demo-app.jar'
