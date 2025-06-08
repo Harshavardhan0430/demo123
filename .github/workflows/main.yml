@@ -49,4 +49,4 @@ jobs:
           app-name: 'exp10'
           slot-name: 'Production'
           package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_07C02D5863FC4BCC8ED57BE2525E895A }}
+   
